@@ -1,33 +1,33 @@
 {
-  "name": "apps_tracker",
-  "version": "1.0.0",
-  "description": "Track job applications using email",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "ts-node src/parseMail.ts"
-  },
-  "dependencies": {
-    "@tensorflow-models/qna": "^1.0.2",
-    "@tensorflow/tfjs-node": "^4.22.0",
-    "colors": "^1.4.0",
-    "delay": "^6.0.0",
-    "discord.js": "^14.18.0",
-    "dotenv": "^16.5.0",
-    "imapflow": "^1.0.186",
-    "mailparser": "^3.7.2",
-    "natural": "^8.0.1",
-    "node-cleanup": "^2.1.2",
-    "ollama": "^0.5.15",
-    "string-strip-html": "^13.4.12",
-    "ts-node": "^10.9.2"
-  },
-  "devDependencies": {
-    "@types/imapflow": "^1.0.20",
-    "@types/mailparser": "^3.4.5",
-    "@types/node": "^22.14.1",
-    "@types/node-cleanup": "^2.1.5"
-  }
+    "name": "apps_tracker",
+    "version": "1.0.0",
+    "description": "Track job applications using email",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "start": "ts-node src/index.ts"
+    },
+    "dependencies": {
+        "@tensorflow-models/qna": "^1.0.2",
+        "@tensorflow/tfjs-node": "^4.22.0",
+        "colors": "^1.4.0",
+        "delay": "^6.0.0",
+        "discord.js": "^14.18.0",
+        "dotenv": "^16.5.0",
+        "imapflow": "^1.0.186",
+        "mailparser": "^3.7.2",
+        "natural": "^8.0.1",
+        "node-cleanup": "^2.1.2",
+        "ollama": "^0.5.15",
+        "string-strip-html": "^13.4.12",
+        "ts-node": "^10.9.2"
+    },
+    "devDependencies": {
+        "@types/imapflow": "^1.0.20",
+        "@types/mailparser": "^3.4.5",
+        "@types/node": "^22.14.1",
+        "@types/node-cleanup": "^2.1.5"
+    }
 }
