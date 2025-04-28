@@ -4,8 +4,16 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: app_tracker
+        environment:
+            - MONGO_URI=mongodb://mongodb:27017
+            - OLLAMA_HOST=http://ollama:11434
+            - EMAIL_HOST=your_email_host
+            - EMAIL_HOST_USER=your_email_user
+            - EMAIL_HOST_PASSWORD=your_email_password
+            - DISCORD_TOKEN=your_discord_token
+            - DISCORD_USER_ID=your_discord_user_id
         volumes:
-            - classifer:/app/classifer
+            - models:/usr/src/app/models
         restart: always
         depends_on:
             - mongodb
@@ -29,5 +37,5 @@ services:
 volumes:
     data:
         driver: local
-    classifer:
+    models:
         driver: local

@@ -5,8 +5,9 @@
     "license": "ISC",
     "author": "",
     "type": "commonjs",
-    "main": "index.js",
+    "main": "./dist/index.js",
     "scripts": {
+        "build": "tsc",
         "start": "ts-node src/index.ts"
     },
     "dependencies": {
