@@ -151,6 +151,12 @@ export class Mail {
 
             const existingMail = await mailCollection.findOne<MailDocument>({ hash: mailDocument.hash }, { projection: { _id: 0 } });
             if (existingMail) {
+                // If the mail classification was verified, set the classification and classificationVerified to true
+                // User already verified the classification, so we can set it to true
+                if (existingMail.classificationVerified) {
+                    mailDocument.classificationVerified = true;
+                    mailDocument.classification = existingMail.classification;
+                }
                 let requestedMailUpdate = { ...existingMail, ...mailDocument };
 
                 await mailCollection.updateOne({ hash: mailDocument.hash }, { $set: requestedMailUpdate });
