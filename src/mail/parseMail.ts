@@ -69,8 +69,8 @@ async function parseForAppStatus(
     }
     if (successResults.length >= successNumber) {
         log(`Already parsed for app status ${mail.toString()}`);
-        log(`Error Results: ${errorResults}`, "debug");
-        log(`Success Results: ${successResults}`, "debug");
+        log(`Error Results: ${errorResults.length}`, "debug");
+        log(`Success Results: ${successResults.length}`, "debug");
         const normizalized = normalizeJsons(successResults);
         return new JobUpdate(normizalized, mail);
     }

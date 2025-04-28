@@ -67,9 +67,27 @@ class MailClassifyQuestion {
         });
 
         const embed = createClassificationEmbed(mail.mail, `Mail classified as ${jobUpdate ? "Job Update" : "Regular Mail"}`);
-        interaction.user.send({ embeds: [embed] });
+        let classificationMessage = interaction.user.send({ embeds: [embed] });
         // Log the result
         log(`Mail ${mail.mail.toString()} classified as ${jobUpdate ? "Job Update" : "Regular Mail"}`, "info");
+
+        // Remove the classifcation message after 15 minutes
+        setTimeout(async () => {
+            try {
+                const msg = await classificationMessage;
+                if (!msg) {
+                    log(`Message not found`, "debug");
+                    return;
+                }
+                if (!msg.deletable) {
+                    return;
+                }
+                await msg.delete();
+                log(`Message deleted after 1 hours`, "debug");
+            } catch (error) {
+                log(`Error deleting message: ${error}`, "debug");
+            }
+        }, 1000 * 60 * 15); // 15 minutes
     }
 
     async updateClassifier(mail: Mail, job_update: boolean) {
