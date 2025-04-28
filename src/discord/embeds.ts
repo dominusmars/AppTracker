@@ -32,7 +32,7 @@ function createClassificationEmbed(mail: Mail, title: string) {
     const embed = createDefaultEmbed()
         .setTitle(title)
         .setDescription(mail.subject)
-        .addFields({ name: "Classification", value: mail.classification }, { name: "From", value: mail.from, inline: true });
+        .addFields({ name: "From", value: mail.from, inline: true }, { name: "Classification", value: mail.classification });
 
     return embed;
 }

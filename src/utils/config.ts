@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { O } from "ollama/dist/shared/ollama.e009de91";
 
 dotenv.config();
 
@@ -15,11 +16,13 @@ const config = {
         })(),
     EMAIL_HOST: process.env.EMAIL_HOST ?? "imap.gmail.com",
     OLLAMA_HOST: process.env.OLLAMA_HOST ?? "http://localhost:11434",
+    OLLAMA_MODEL: process.env.OLLAMA_MODEL ?? "llama3.2:latest",
     OLLAMA_API_KEY:
         process.env.OLLAMA_API_KEY ??
         (() => {
             console.log("OLLAMA_API_KEY is not set", "warn");
         })(),
+
     DISCORD_TOKEN:
         process.env.DISCORD_TOKEN ??
         (() => {

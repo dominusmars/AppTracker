@@ -4,6 +4,7 @@ import { query } from "../machinelearning/ollama";
 import { log } from "../utils/debug";
 import { normalizeJsons } from "../utils/jsonParser";
 import { JobUpdate } from "../job/jobUpdate";
+import config from "../utils/config";
 const statuses = ["applied", "interview", "offer", "rejected", "hired"];
 const successNumber = 6;
 const errorNumber = 3;
@@ -90,7 +91,7 @@ async function parseForAppStatus(
 
     // Query the model
     // If the successResults is 5, set the temperature to 0, else set it to undefined
-    const answer = await query(message, "llama3.2:latest", tempature);
+    const answer = await query(message, config.OLLAMA_MODEL, tempature);
     if (!answer) {
         errorResults.push(OllamaError);
         return parseForAppStatus(mail, successResults, errorResults);
