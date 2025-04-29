@@ -25,6 +25,7 @@ export class Mail {
     classificationVerified: boolean = false;
     hash: string | null = null;
     parsed: boolean = false; // if the mail has been parsed or not
+    jobUpdate: JobUpdate | null = null; // if the mail is a job update or not
     constructor(from: string, to: string, subject: string, text: string, html: string, date = Date.now(), source = "") {
         this.from = from;
         this.to = to;
@@ -123,6 +124,23 @@ export class Mail {
                 }
             }
         }
+        if (verified && classification == "RegularMail" && this.classification == "JobUpdate" && this.parsed) {
+            // Check if the mail was parsed for job status and if it was, set the classification to RegularMail, and delete the job from the database
+
+            if (this.jobUpdate) {
+                log(`Mail ${this.toString()} classified as Regular Mail deleting Job: ${this.jobUpdate.toString()}`, "debug");
+                this.jobUpdate.deleteJobFromDatabase();
+            } else {
+                const result = await parseForAppStatus(this);
+                if (result instanceof JobUpdate) {
+                    log(`Mail ${this.toString()} classified as Regular Mail deleting Job: ${result.toString()}`, "debug");
+                    result.deleteJobFromDatabase();
+                } else {
+                    log(`Mail ${this.toString()} classified as Regular Mail`, "debug");
+                }
+            }
+        }
+
         this.classification = classification;
     }
 
@@ -137,6 +155,7 @@ export class Mail {
             log(`Error parsing for app status ${this.toString()}: ${result.error}`, "error");
             return result.error;
         }
+        this.jobUpdate = result;
         this.parsed = true;
         result.sendDirectMessage();
         result.saveJobInDatabase();
@@ -205,6 +224,10 @@ class MailClient {
             logger: false,
         };
         this.client = new ImapFlow(this.options);
+        this.client.on("error", (err) => {
+            log(`Mail client error: ${err}`, "error");
+        });
+
         this.lastMail = null;
         this.connections = 0;
 
@@ -256,23 +279,29 @@ class MailClient {
         }
         const client = new ImapFlow(this.options);
         this.connections++;
+        try {
+            await client.connect();
 
-        await client.connect();
-        await client.mailboxOpen("INBOX");
+            await client.mailboxOpen("INBOX");
 
-        let message = await client.fetchOne("*", {
-            source: true,
-            envelope: true,
-            headers: true,
-            flags: true,
-            bodyStructure: true,
-            labels: true,
-        });
-        let result = await this.messageToMail(message);
-        client.close();
-
-        this.connections--;
-        return result;
+            let message = await client.fetchOne("*", {
+                source: true,
+                envelope: true,
+                headers: true,
+                flags: true,
+                bodyStructure: true,
+                labels: true,
+            });
+            let result = await this.messageToMail(message);
+            client.close();
+            return result;
+        } catch (error) {
+            log(`Error getting latest mail: ${error}`, "error");
+            return null;
+        } finally {
+            client.close();
+            this.connections--;
+        }
     }
     async disconnect() {
         await this.client.logout();

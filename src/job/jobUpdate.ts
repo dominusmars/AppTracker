@@ -78,4 +78,19 @@ export class JobUpdate {
         await jobCollection.insertOne(jobDocument);
         log(`Job Status inserted: ${this.job} - ${this.company} ${this.status}`, "info");
     }
+    async deleteJobFromDatabase() {
+        const options = this.mail
+            ? { job: this.job, company: this.company, mailHashs: [this.mail.getHash()] }
+            : { job: this.job, company: this.company };
+
+        const existingJob = await jobCollection.findOne(options);
+        if (!existingJob) {
+            log(`Job not found in database: ${this.job} - ${this.company}`, "warn");
+            return;
+        }
+
+        //if job already exists, delete from the database
+        await jobCollection.deleteOne(options);
+        log(`Job Status deleted: ${this.job} - ${this.company} ${this.status}`, "info");
+    }
 }
