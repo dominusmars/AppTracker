@@ -1,6 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { Mail } from "../mail/email";
-import { AppStatus } from "../mail/parseMail";
+import { Mail } from "../mail/mail";
 import { JobUpdate } from "../job/jobUpdate";
 
 function createDefaultEmbed() {
@@ -24,7 +23,7 @@ function createEmailEmbed(mail: Mail, title: string) {
             { name: "To", value: mail.to, inline: true },
             { name: "From", value: mail.from, inline: true },
             { name: "Date", value: mail.date.toString(), inline: true },
-            { name: "Text", value: mail.getText(true).substring(0, 255) }
+            { name: "Text", value: mail.getText(true).substring(0, 1023) }
         );
     return embed;
 }
@@ -53,5 +52,14 @@ function createJobUpdateEmbed(jobStatus: JobUpdate, mail: Mail) {
 
     return embed;
 }
+function createJobUpdatesListEmbed(JobUpdates: JobUpdate[]) {
+    const embed = createDefaultEmbed().setTitle("Job Updates").setDescription("List of job updates").setColor("#00ff00");
 
-export { createDefaultEmbed, createEmailEmbed, createClassificationEmbed, createJobUpdateEmbed };
+    JobUpdates.forEach((jobUpdate) => {
+        embed.addFields({ name: jobUpdate.toString(), value: jobUpdate.mail.subject });
+    });
+
+    return embed;
+}
+
+export { createDefaultEmbed, createEmailEmbed, createClassificationEmbed, createJobUpdateEmbed, createJobUpdatesListEmbed };

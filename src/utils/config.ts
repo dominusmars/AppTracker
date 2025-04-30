@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import { O } from "ollama/dist/shared/ollama.e009de91";
 
 dotenv.config();
 
@@ -27,6 +26,11 @@ const config = {
         process.env.DISCORD_TOKEN ??
         (() => {
             throw new Error("DISCORD_TOKEN is not set");
+        })(),
+    DISCORD_CLIENT_ID:
+        process.env.DISCORD_CLIENT_ID ??
+        (() => {
+            throw new Error("DISCORD_CLIENT_ID is not set");
         })(),
     DISCORD_USER_ID:
         process.env.DISCORD_USER_ID ??

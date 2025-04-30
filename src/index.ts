@@ -1,4 +1,5 @@
-import mailClient, { Mail } from "./mail/email";
+import mailClient from "./mail/email";
+import { Mail } from "./mail/mail";
 import { mailClassifyQueston } from "./discord/questions";
 import { mailClassifier } from "./machinelearning/classifier";
 import { log } from "./utils/debug";

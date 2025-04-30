@@ -1,12 +1,12 @@
 import client, { sendDM } from "./bot";
 import { mailClassifier } from "../machinelearning/classifier";
-import { Mail } from "../mail/email";
+import { Mail } from "../mail/mail";
 import { createClassificationEmbed, createEmailEmbed } from "./embeds";
 import config from "../utils/config";
-import { getID } from "../utils/randomId";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, Events, Interaction, Message, MessageFlags } from "discord.js";
 import { log } from "../utils/debug";
 import nodeCleanUp from "node-cleanup";
+
 class MailClassifyQuestion {
     sentMail: { id: string; mail: Mail; message: Promise<Message> }[];
     constructor() {
@@ -67,6 +67,7 @@ class MailClassifyQuestion {
         });
 
         const embed = createClassificationEmbed(mail.mail, `Mail classified as ${jobUpdate ? "Job Update" : "Regular Mail"}`);
+
         let classificationMessage = interaction.user.send({ embeds: [embed] });
         // Log the result
         log(`Mail ${mail.mail.toString()} classified as ${jobUpdate ? "Job Update" : "Regular Mail"}`, "info");
@@ -83,7 +84,7 @@ class MailClassifyQuestion {
                     return;
                 }
                 await msg.delete();
-                log(`Message deleted after 1 hours`, "debug");
+                log(`Message deleted after 1 hour`, "debug");
             } catch (error) {
                 log(`Error deleting message: ${error}`, "debug");
             }

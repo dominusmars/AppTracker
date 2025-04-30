@@ -1,1 +1,1 @@
-export type MailClassifications = "RegularMail" | "JobUpdate" | "Unknown";
+export type MailClassification = "RegularMail" | "JobUpdate" | "Unknown";

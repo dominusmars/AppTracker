@@ -1,9 +1,8 @@
 import nautral, { BayesClassifier } from "natural";
 import { log } from "../utils/debug";
-import { MailClassifications } from "./types/classifer";
-import { Mail } from "../mail/email";
-import { mailCollection } from "../data/data";
-import { MailDocument } from "../data/types/mongoDbTypes";
+import { MailClassification } from "./types/classifer";
+import { Mail } from "../mail/mail";
+import { mailCollection } from "../data/collections";
 import path from "node:path";
 
 const classiferLocation = path.join(__dirname, "..", "..", "models", "classifer.json");
@@ -89,7 +88,7 @@ class MailClassifier {
         let correctJobApplications = 0;
 
         for (const mail of mails) {
-            this.classifer.classify(mail.text) as MailClassifications;
+            this.classifer.classify(mail.text) as MailClassification;
             if (mail.classification === this.classifer.classify(mail.text)) {
                 correct++;
                 if (mail.classification === "RegularMail") {
@@ -113,7 +112,7 @@ class MailClassifier {
         return jobApplicationLoss;
     }
 
-    async classify(mail: Mail): Promise<MailClassifications> {
+    async classify(mail: Mail): Promise<MailClassification> {
         try {
             if (!this.classifer) {
                 this.classifer = await this.load();

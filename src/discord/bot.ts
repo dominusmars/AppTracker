@@ -1,14 +1,54 @@
-import { Client, GatewayIntentBits, Message, MessageCreateOptions, MessagePayload } from "discord.js";
+import {
+    ActivityType,
+    Client,
+    Events,
+    GatewayIntentBits,
+    Message,
+    MessageCreateOptions,
+    MessagePayload,
+    Partials,
+    PresenceUpdateStatus,
+    Status,
+} from "discord.js";
 import config from "../utils/config";
 import { log } from "../utils/debug";
-import { Mail } from "../mail/email";
+import commands from "./getCommands";
 
 const client = new Client({
-    intents: [GatewayIntentBits.MessageContent],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-client.once("ready", () => {
+client.once(Events.ClientReady, () => {
     log("Discord bot is ready!", "info");
+    client.user!.setStatus(PresenceUpdateStatus.Online);
+    client.user!.setActivity("Job Updates", { type: ActivityType.Watching });
+    if (!client.user) {
+        log("Client user is undefined", "error");
+        return;
+    }
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isChatInputCommand()) {
+        return;
+    }
+    const { commandName } = interaction;
+    log(`Command received: ${commandName}`, "info");
+    try {
+        const command = commands.commands.get(commandName);
+        if (!command) {
+            log(`Command not found: ${commandName}`, "error");
+            return;
+        }
+        await command.execute(interaction);
+    } catch (error) {
+        log(`Error executing command: ${error}`, "error");
+        await interaction.reply({
+            content: "There was an error while executing this command!",
+            ephemeral: true,
+        });
+    }
 });
 
 client.login(config.DISCORD_TOKEN);
