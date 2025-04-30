@@ -59,8 +59,7 @@ export async function sendDM(message: MessageCreateOptions) {
         log(`User not found: ${config.DISCORD_USER_ID}`, "error");
         throw new Error("User not found");
     }
-
-    return user.send({ ...message });
+    return user.send(message);
 }
 
 export default client;

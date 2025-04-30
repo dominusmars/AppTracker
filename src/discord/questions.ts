@@ -12,12 +12,16 @@ class MailClassifyQuestion {
     constructor() {
         this.sentMail = [];
         client.on(Events.InteractionCreate, (interaction) => {
-            if (interaction.isButton()) {
-                log(`Button clicked: ${interaction.customId}`, "debug");
-                if (interaction.customId.startsWith("jobupdate_")) {
-                    this.handleJobUpdateInteraction(interaction);
-                    return;
+            try {
+                if (interaction.isButton()) {
+                    log(`Button clicked: ${interaction.customId}`, "debug");
+                    if (interaction.customId.startsWith("jobupdate_")) {
+                        this.handleJobUpdateInteraction(interaction);
+                        return;
+                    }
                 }
+            } catch (error) {
+                log(`Error handling interaction: ${error}`, "error");
             }
         });
         nodeCleanUp((code, signal) => {

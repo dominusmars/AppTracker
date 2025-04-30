@@ -1,5 +1,7 @@
 import { log } from "./debug";
 
+// remove html tags, links, and personal info from text
+// should return the same text, without any html tags, links
 function removeHtml(text: string): string {
     // remove script tags
     text = text.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, "");
@@ -18,6 +20,9 @@ function removeHtml(text: string): string {
     // remove html codes
     text = text.replace(/&[a-zA-Z0-9#]+;/g, "");
     text = text.replace(/&#[0-9]+;/g, "");
+
+    // remove data:image
+    text = text.replace(/data:image\/[^;]+;base64,[a-zA-Z0-9+/=]+/g, "");
 
     return text.trim();
 }

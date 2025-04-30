@@ -1,4 +1,4 @@
-import { removeAll } from "../utils/textParse";
+import { removeAll, removeHtml } from "../utils/textParse";
 import crypto from "node:crypto";
 import { MailDocument } from "../data/types/mongoDbTypes";
 import { MailClassification } from "../machinelearning/types/classifer";
@@ -46,7 +46,8 @@ export class Mail {
         return new Mail(mail.from, mail.to, mail.subject, mail.text, mail.html, dateOfMail.getTime(), mail.source);
     }
     forProcessing() {
-        return `From: ${this.from} To: ${this.to} Subject: ${this.subject} Text: ${this.text}}`;
+        const text = removeHtml(this.text);
+        return `From: ${this.from} To: ${this.to} Subject: ${this.subject} Text: ${text}}`;
     }
 
     toString() {

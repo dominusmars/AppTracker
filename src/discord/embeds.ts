@@ -23,7 +23,7 @@ function createEmailEmbed(mail: Mail, title: string) {
             { name: "To", value: mail.to, inline: true },
             { name: "From", value: mail.from, inline: true },
             { name: "Date", value: mail.date.toString(), inline: true },
-            { name: "Text", value: mail.getText(true).substring(0, 1023) }
+            { name: "Text", value: mail.getText(true).substring(0, 1000) }
         );
     return embed;
 }
