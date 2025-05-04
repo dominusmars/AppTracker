@@ -51,6 +51,7 @@ class MailClient {
         if (!mail) {
             return;
         }
+        // if the mail is the same as the last mail, return
         if (this.lastMail && this.lastMail.compare(mail)) {
             delay(this.pollrate).then(() => {
                 this.pollMail();
